@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    volumes:
+      - .:/app
+    environment:
+      - MONGODB_URL=mongodb://adminUser:dfvjkn3msvmm0f3mcv@108.160.140.79:27017/google-keywords
+    # ports:
+    #    - "8000:80"
+    expose:
+      - "8000"
+    networks:
+      - fastapi-network
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro  # Mount SSL certificates
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - web
+    networks:
+      - fastapi-network
+
+networks:
+  fastapi-network:

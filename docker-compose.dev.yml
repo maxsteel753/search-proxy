@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    volumes:
+      - .:/app
+    environment:
+      MONGODB_URL : mongodb://adminUser:dfvjkn3msvmm0f3mcv@108.160.140.79:27017/admin
+      REDIS_URL : redis://host.docker.internal:6379
+      KAFKA_URL : 127.0.0.1:9093
+      REDIS_DB :  0
+      REDIS_CONNECTION_TIMEOUT : 5
+      REDIS_POOL_SIZE : 10
+
+    ports:
+       - "8000:8000"
+    # expose:
+    #   - "8000"
+    networks:
+      - fastapi-network
+# google-keywords
+#   nginx:
+#     image: nginx:latest
+#     volumes:
+#       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+#  #     - /etc/letsencrypt:/etc/letsencrypt:ro  # Mount SSL certificates
+#     ports:
+#       - "80:80"
+#   #   - "443:443"
+#     depends_on:
+#       - web
+#     networks:
+#       - fastapi-network
+
+networks:
+  fastapi-network:
