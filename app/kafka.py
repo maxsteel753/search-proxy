@@ -9,8 +9,12 @@ async def get_kafka_producer():
     global producer
     if producer is None:  # Initialize only if producer is not already started
         producer = AIOKafkaProducer(
-            loop=asyncio.get_event_loop(),
-            bootstrap_servers=settings.KAFKA_BROKER_URL,
+                loop=asyncio.get_event_loop(),
+                bootstrap_servers=settings.KAFKA_BROKER_URL,
+                security_protocol="SASL_PLAINTEXT",
+                sasl_mechanism="PLAIN",
+                sasl_plain_username=settings.KAFKA_USERNAME,
+                sasl_plain_password=settings.KAFKA_PASSWORD,
         )
         await producer.start()
     return producer
@@ -22,7 +26,7 @@ async def get_kafka_consumer(topic: str):
             topic,
             loop=asyncio.get_event_loop(),
             bootstrap_servers=settings.KAFKA_BROKER_URL,
-            group_id="my-consumer-group",  # Group to ensure each message is processed only once
+            group_id="navigaze",  # Group to ensure each message is processed only once
             enable_auto_commit=True,        # Enable auto-commit to mark messages as processed
             auto_offset_reset="earliest"    # Start from the earliest message if no offset is found
         )

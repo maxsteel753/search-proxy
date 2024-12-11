@@ -7,7 +7,14 @@ services:
     volumes:
       - .:/app
     environment:
-      - MONGODB_URL=mongodb://adminUser:dfvjkn3msvmm0f3mcv@108.160.140.79:27017/google-keywords
+        MONGODB_URL : mongodb://adminUser:dfvjkn3msvmm0f3mcv@108.160.140.79:27017/google-keywords
+        REDIS_URL : redis://host.docker.internal:6379
+        REDIS_DB :  0
+        REDIS_CONNECTION_TIMEOUT : 5
+        REDIS_POOL_SIZE : 10
+        KAFKA_BROKER_URL : 45.76.208.187:9092
+        KAFKA_USERNAME: admin
+        KAFKA_PASSWORD: NAVIgaze44##
     # ports:
     #    - "8000:80"
     expose:
