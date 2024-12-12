@@ -15,6 +15,7 @@ services:
         KAFKA_BROKER_URL : 45.76.208.187:9092
         KAFKA_USERNAME: admin
         KAFKA_PASSWORD: NAVIgaze44##
+        REDIS_PASSWORD: NAVIgaze44##
     # ports:
     #    - "8000:80"
     expose:
