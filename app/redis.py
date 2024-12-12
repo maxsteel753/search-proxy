@@ -9,7 +9,9 @@ async def get_redis_pool():
     redis = aioredis.from_url(
         settings.REDIS_URL,
         db=settings.REDIS_DB,
-        max_connections=settings.REDIS_POOL_SIZE  # Remove timeout from here
+        max_connections=settings.REDIS_POOL_SIZE,  # Remove timeout from here
+        password=settings.REDIS_PASSWORD,
+        #decode_responses=True  # Optional: enables string responses
     )
     
     # Set connection timeout separately in the Redis connection settings if necessary
