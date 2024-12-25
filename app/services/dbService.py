@@ -12,4 +12,8 @@ class dbService:
     async def get_from_mongo(db,collection_name,key):
         collection = db[collection_name]
         result = await collection.find_one({"q": key})
-        return result
+        if result:
+            return {
+                "results":result['results'],
+                "related_search_queries":result['related_searches']
+            }
