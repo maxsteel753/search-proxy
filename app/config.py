@@ -12,6 +12,6 @@ class Settings:
     REDIS_DB: int = int(os.getenv("REDIS_DB", 0))  # Redis DB index (default 0)
     REDIS_CONNECTION_TIMEOUT: int = int(os.getenv("REDIS_CONNECTION_TIMEOUT", 5))  # Timeout in seconds
     REDIS_POOL_SIZE: int = int(os.getenv("REDIS_POOL_SIZE", 10))  # Connection pool size
-    REDIS_PASSWORD: int = int(os.getenv("REDIS_PASSWORD",""))
+    REDIS_PASSWORD: str = os.getenv("REDIS_PASSWORD","")
 
 settings = Settings()
