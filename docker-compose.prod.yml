@@ -38,3 +38,4 @@ services:
 
 networks:
   fastapi-network:
+    driver: bridge
