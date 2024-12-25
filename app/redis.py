@@ -30,3 +30,15 @@ async def get_from_redis(key: str):
     result = await redis.get(key)
     await redis.close()
     return result
+
+# Function to delete data from Redis
+async def delete_from_redis(key: str):
+    redis = await get_redis_pool()
+    await redis.delete(key)
+    await redis.close()
+
+# Function to clear all cache (if needed)
+async def clear_all_cache():
+    redis = await get_redis_pool()
+    await redis.flushdb()
+    await redis.close()

@@ -1,5 +1,5 @@
 from fastapi import  HTTPException
-
+import json
 
 class dbService:
 
@@ -13,7 +13,6 @@ class dbService:
         collection = db[collection_name]
         result = await collection.find_one({"q": key})
         if result:
-            return {
-                "results":result['results'],
-                "related_search_queries":result['related_searches']
-            }
+            return result
+        else:
+            return None

@@ -20,24 +20,26 @@ async def check_or_send_to_kafka(
 ):
     kafka_service = KafkaServices()
     redis_key = f"{q}:{page}:{pagesize}"  # Unique Redis key for query and pagination
-    primary_redis_key = q  # Key for raw MongoDB data
+    primary_redis_key = str("test_"+q)  # Key for raw MongoDB data
 
     # Step 1: Check if the data is in Redis
     try:
         # Check for paginated data in Redis
         cached_result = await get_from_redis(redis_key)
         if cached_result:
-            return {"result": cached_result.decode("utf-8"), "source": "cache (Redis)"}
+             return {"result": json.loads(cached_result.decode("utf-8")), "source": "cache (Redis)"}
     except Exception as e:
+        
         raise HTTPException(status_code=500, detail=f"Error accessing Redis: {e}")
 
     # Step 2: Check if the raw data is in MongoDB or Redis
     try:
         cached_main_result = await get_from_redis(primary_redis_key)
         if cached_main_result:
-            mongo_result = cached_main_result.decode("utf-8")
+              mongo_result = json.loads(cached_main_result.decode("utf-8"))
         else:
             mongo_result = await db_service.get_from_mongo(db, "google_search_results", q)
+            # print(mongo_result)
             if mongo_result:
                 # Save raw MongoDB result to Redis for future use
                 try:
@@ -47,6 +49,7 @@ async def check_or_send_to_kafka(
         
         if mongo_result:
             # Transform the MongoDB result into paginated format
+        #   print(mongo_result["results"])
             transformed_data = transform_API_data(mongo_result, page=page, page_size=pagesize)
             if (transformed_data and "error" not in transformed_data):
                 # Save the transformed data (paginated) to Redis
@@ -56,6 +59,7 @@ async def check_or_send_to_kafka(
                     print(f"Error saving transformed data to Redis: {e}")
                 return {"result": transformed_data, "source": "cache (MongoDB)"}
             else:
+                print("failure")
                 return transformed_data
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error accessing MongoDB: {e}")
