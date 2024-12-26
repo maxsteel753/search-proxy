@@ -1,11 +1,11 @@
-
 import asyncio
-from app.kafka import get_kafka_producer,get_kafka_consumer
+from app.kafka import get_kafka_producer, get_kafka_consumer
 
 class KafkaServices:
-    
+
+    @staticmethod  # Added the static method decorator
     async def send_message(message: str):
-    # Temporarily remove Kafka code to test if the endpoint works without Kafka
+        # Temporarily remove Kafka code to test if the endpoint works without Kafka
         producer = await get_kafka_producer()
         try:
             await asyncio.wait_for(
@@ -14,6 +14,7 @@ class KafkaServices:
         except TimeoutError:
             return {"error": "Kafka producer timed out"}
         return {"message": "Message sent to Kafka", "data": message}
+
     
     # async def receive_messages(self):
     #     topic = "navizage-search"
